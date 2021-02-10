@@ -18,7 +18,9 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public void add(Setmeal setmeal, Integer[] checkgroupIds) {
         setmealDao.add(setmeal);
-        reAssociation(setmeal.getId(),checkgroupIds);
+        if (checkgroupIds != null & checkgroupIds.length > 0){
+            reAssociation(setmeal.getId(),checkgroupIds);
+        }
     }
 
     private void reAssociation(Integer setmealId, Integer[] checkgroupIds) {

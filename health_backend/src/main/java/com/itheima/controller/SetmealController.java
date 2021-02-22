@@ -3,6 +3,8 @@ package com.itheima.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.constant.MessageConstant;
 import com.itheima.constant.RedisConstant;
+import com.itheima.entity.PageResult;
+import com.itheima.entity.QueryPageBean;
 import com.itheima.entity.Result;
 import com.itheima.pojo.Setmeal;
 import com.itheima.service.SetmealService;
@@ -38,8 +40,8 @@ public class SetmealController {
             //文件上传到七牛云
             QiniuUtils.upload2Qiniu(imgFile.getBytes(), fileName);
             Result result = new Result(true, MessageConstant.PIC_UPLOAD_SUCCESS);
-            result.setData(fileName);
-            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_RESOURCES,fileName);
+//            result.setData(fileName);
+//            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_RESOURCES,fileName);
             return result;
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,8 +59,14 @@ public class SetmealController {
             e.printStackTrace();
             return new Result(false,MessageConstant.ADD_SETMEAL_FAIL);
         }
-
-
+    }
+    @RequestMapping("/findPage")
+    public PageResult findPage(@RequestBody QueryPageBean queryPageBean){
+        return setmealService.pageQuery(
+                queryPageBean.getCurrentPage(),
+                queryPageBean.getPageSize(),
+                queryPageBean.getQueryString()
+        );
     }
 
 }

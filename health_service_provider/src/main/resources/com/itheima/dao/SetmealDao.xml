@@ -4,10 +4,22 @@
 <mapper namespace="com.itheima.dao.SetmealDao">
 
     <insert id="add" parameterType="com.itheima.pojo.Setmeal">
-        insert into t_setmeal (code,name,sex,age,helpCode,price,remark,attention,img) values (#{code},#{name},#{sex},#{age},#{helpCode},#{price},# {remark},#{attention},#{img})
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_setmeal (code,name,sex,age,helpCode,price,remark,attention,img) values (#{code},#{name},#{sex},#{age},#{helpCode},#{price},#{remark},#{attention},#{img})
     </insert>
 
-    <insert id="setSetmealAndCheckGroup" parameterType="com.itheima.pojo.Setmeal">
-        insert into t_setmeal_checkgroup (setmeal_id,checkgroup_id) values (#{setmeal_id},#{checkgroup_id})
+    <insert id="setSetmealAndCheckGroup" parameterType="map">
+        insert into t_setmeal_checkgroup (setmeal_id,checkgroup_id)
+        values
+        (#{setmeal_id},#{checkgroup_id})
     </insert>
+
+    <select id="selectByCondition" parameterType="string" resultType="com.itheima.pojo.Setmeal">
+        select * from t_setmeal
+        <if test="value != null and value.length > 0">
+            where code = #{value} or name = #{value} or helpCode = #{value}
+        </if>
+    </select>
 </mapper>

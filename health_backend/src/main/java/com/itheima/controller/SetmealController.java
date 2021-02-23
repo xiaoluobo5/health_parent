@@ -41,7 +41,7 @@ public class SetmealController {
             QiniuUtils.upload2Qiniu(imgFile.getBytes(), fileName);
             Result result = new Result(true, MessageConstant.PIC_UPLOAD_SUCCESS);
             result.setData(fileName);
-//            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_RESOURCES,fileName);
+            jedisPool.getResource().sadd(RedisConstant.SETMEAL_PIC_RESOURCES,fileName);
             return result;
         } catch (IOException e) {
             e.printStackTrace();

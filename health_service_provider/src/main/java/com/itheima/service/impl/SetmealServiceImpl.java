@@ -24,10 +24,13 @@ public class SetmealServiceImpl implements SetmealService {
     private JedisPool jedisPool;
     @Override
     public void add(Setmeal setmeal, Integer[] checkgroupIds) {
+        //1.套餐表新增数据
         setmealDao.add(setmeal);
+        //2.关系表加数据
         if (checkgroupIds != null & checkgroupIds.length > 0){
             reAssociation(setmeal.getId(),checkgroupIds);
         }
+        //3.图片名字放入dbredishkey
         savePic2Redis(setmeal.getImg());
     }
 

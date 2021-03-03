@@ -10,14 +10,16 @@ import java.util.Set;
 public class ClearImgJob {
     @Autowired
     private JedisPool jedisPool;
-    private void clearImg() {
+    public void clearImg() {
         Set<String> sdiff = jedisPool.getResource().sdiff(RedisConstant.SETMEAL_PIC_RESOURCES, RedisConstant.SETMEAL_PIC_DB_RESOURCES);
-        for (String filename : sdiff) {
-            //七牛云删除垃圾图片
-            QiniuUtils.deleteFileFromQiniu(filename);
-            //从Redis删除垃圾图片名称
-            jedisPool.getResource().srem(RedisConstant.SETMEAL_PIC_RESOURCES,filename);
+        if (sdiff != null) {
+            for (String filename : sdiff) {
+                //七牛云删除垃圾图片
+                QiniuUtils.deleteFileFromQiniu(filename);
+                System.out.println("删除了！！！");
+                //从Redis删除垃圾图片名称
+                jedisPool.getResource().srem(RedisConstant.SETMEAL_PIC_RESOURCES,filename);
+            }
         }
-
     }
 }

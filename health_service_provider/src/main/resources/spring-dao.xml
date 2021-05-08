@@ -20,9 +20,9 @@
     <bean id="dataSource"
           class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
         <property name="username" value="health" />
-        <property name="password" value="123456" />
+        <property name="password" value="Maohao123" />
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://192.168.50.88:23306/health?characterEncoding=UTF-8" />
+        <property name="url" value="jdbc:mysql://radish0612.mysql.cn-chengdu.rds.aliyuncs.com:3306/health?characterEncoding=UTF-8" />
     </bean>
     <!--spring和mybatis整合的工厂bean-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

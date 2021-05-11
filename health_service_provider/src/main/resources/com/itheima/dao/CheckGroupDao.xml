@@ -67,4 +67,10 @@
     <select id="findAll" resultType="com.itheima.pojo.CheckGroup">
         select * from t_checkgroup
     </select>
+    <!--根据套餐id查询检查项信息-->
+    <select id="findCheckGroupById" resultType="com.itheima.pojo.CheckGroup">
+        select * from t_checkgroup
+        where id
+                  in (select checkgroup_id from t_setmeal_checkgroup where setmeal_id=#{id})
+    </select>
 </mapper>

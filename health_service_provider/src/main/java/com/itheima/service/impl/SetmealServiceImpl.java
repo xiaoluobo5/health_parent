@@ -4,8 +4,10 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.itheima.constant.RedisConstant;
+import com.itheima.dao.CheckGroupDao;
 import com.itheima.dao.SetmealDao;
 import com.itheima.entity.PageResult;
+import com.itheima.pojo.CheckGroup;
 import com.itheima.pojo.Setmeal;
 import com.itheima.service.SetmealService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service(interfaceClass = SetmealService.class)
@@ -20,6 +23,8 @@ import java.util.Map;
 public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealDao setmealDao;
+    @Autowired
+    private CheckGroupDao checkGroupDao;
     @Autowired
     private JedisPool jedisPool;
     @Override
@@ -42,6 +47,19 @@ public class SetmealServiceImpl implements SetmealService {
         PageHelper.startPage(currentPage,pageSize);
         Page<Setmeal> page = setmealDao.selectByCondition(queryString);
         return new PageResult(page.getTotal(),page.getResult());
+    }
+
+    @Override
+    public List<Setmeal> findAll() {
+        return setmealDao.findAll();
+    }
+
+    @Override
+    public Setmeal findById(Integer id) {
+        Setmeal setmeal = setmealDao.findById(id);
+        List<CheckGroup> checkGroupList = checkGroupDao.findCheckGroupById(setmeal.getId());
+        setmeal.setCheckGroups(checkGroupList);
+        return setmeal;
     }
 
     private void reAssociation(Integer setmealId, Integer[] checkgroupIds) {

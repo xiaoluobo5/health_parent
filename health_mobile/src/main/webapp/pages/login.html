@@ -71,7 +71,7 @@
                     clock = window.setInterval(doLoop, 1000); //一秒执行一次
                     axios.post("/validateCode/send4Login.do?telephone=" + telephone).then((response) => {
                         if(!response.data.flag){
-                            //验证码发送失败
+                            //验证码发送失
                             this.$message.error('验证码发送失败，请检查手机号输入是否正确');
                         }
                     });
@@ -83,7 +83,7 @@
                         this.$message.error('请输入正确的手机号');
                         return false;
                     }
-                    axios.post("/login/check.do",this.loginInfo).then((response) => {
+                    axios.post("/mobile/member/smsLogin.do",this.loginInfo).then((response) => {
                         if(response.data.flag){
                             //登录成功,跳转到index.html
                             window.location.href="index.html";

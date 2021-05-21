@@ -5,9 +5,11 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.itheima.constant.RedisConstant;
 import com.itheima.dao.CheckGroupDao;
+import com.itheima.dao.CheckItemDao;
 import com.itheima.dao.SetmealDao;
 import com.itheima.entity.PageResult;
 import com.itheima.pojo.CheckGroup;
+import com.itheima.pojo.CheckItem;
 import com.itheima.pojo.Setmeal;
 import com.itheima.service.SetmealService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class SetmealServiceImpl implements SetmealService {
     private SetmealDao setmealDao;
     @Autowired
     private CheckGroupDao checkGroupDao;
+    @Autowired
+    private CheckItemDao checkItemDao;
     @Autowired
     private JedisPool jedisPool;
     @Override
@@ -56,9 +60,18 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     public Setmeal findById(Integer id) {
-        Setmeal setmeal = setmealDao.findById(id);
+        //调用dao, 基于套餐Id 获取指定的套餐对象
+        Setmeal setmeal =  setmealDao.findById(id);
+        //调用dao, 基于套餐ID, 获取对应所关联的所有检查组信息
         List<CheckGroup> checkGroupList = checkGroupDao.findCheckGroupById(setmeal.getId());
         setmeal.setCheckGroups(checkGroupList);
+
+        //调用dao, 基于检查组id, 获取对应所关联的所有检查项信息
+        for (CheckGroup checkGroup : checkGroupList) {
+            //基于检查组id, 获取对应所关联的所有检查项信息
+            List<CheckItem> checkItemList = checkItemDao.findCheckItemById(checkGroup.getId());
+            checkGroup.setCheckItems(checkItemList);
+        }
         return setmeal;
     }
 

@@ -65,7 +65,10 @@
         select * from t_checkitem
     </select>
 
-    <!--根据检查项ID统计数据量-->
-
+    <!--基于检查组id, 获取对应所关联的所有检查项信息-->
+    <select id="findCheckItemById" resultType="com.itheima.pojo.CheckItem">
+        select * from t_checkitem
+        where id in (select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{checkgroupId})
+    </select>
 
 </mapper>

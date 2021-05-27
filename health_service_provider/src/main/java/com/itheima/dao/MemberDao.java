@@ -7,4 +7,6 @@ public interface MemberDao {
     Member findByTelephone(String telephone);
 
     void add(Member newMember);
+
+    void update(Member member);
 }

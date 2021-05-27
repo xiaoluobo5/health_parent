@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.OrderDao">
+    <!--添加体检预约-->
+    <insert id="add" parameterType="com.itheima.pojo.Order">
+        insert into t_order
+        values (null, #{memberId}, #{orderDate}, #{orderType}, #{orderStatus}, #{setmealId})
+        <selectKey resultType="integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!--基于条件查询体检预约信息-->
+    <resultMap id="orderMap" type="com.itheima.pojo.Order">
+        <result column="member_id" property="memberId"/>
+        <result column="setmeal_id" property="setmealId"/>
+    </resultMap>
+    <!--多条件查询-->
+    <select id="findByCondition" resultMap="orderMap">
+        select * from t_order
+        <where>
+            <if test="memberId != null">
+                and member_id=#{memberId}
+            </if>
+            <if test="orderDate != null">
+                and orderDate=#{orderDate}
+            </if>
+            <if test="setmealId != null">
+                and setmeal_id=#{setmealId}
+            </if>
+        </where>
+    </select>
+    <!--基于预约订单id 获取体检预约成功的信息-->
+    <select id="findById4Detail" resultType="java.util.Map">
+        select m.name AS member, s.name AS setmeal, o.orderDate, o.orderType
+        from t_order AS o, t_setmeal AS s, t_member AS m
+        where o.setmeal_id = s.id and o.member_id = m.id and o.id = #{id}
+    </select>
+</mapper>

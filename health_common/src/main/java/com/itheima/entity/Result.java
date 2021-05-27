@@ -21,7 +21,7 @@ public class Result implements Serializable{
         this.data = data;
     }
 
-    public boolean isFlag() {
+    public boolean getFlag() {
         return flag;
     }
     public void setFlag(boolean flag) {

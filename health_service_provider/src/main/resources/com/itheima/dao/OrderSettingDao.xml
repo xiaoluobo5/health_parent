@@ -7,6 +7,9 @@
         insert into t_ordersetting
             (orderDate, number, reservations) VALUES (#{orderDate},#{number},#{reservations})
     </insert>
+    <update id="updateReservations" parameterType="com.itheima.pojo.OrderSetting">
+        update t_ordersetting set reservations = #{reservations} where orderDate = #{orderDate}
+    </update>
     <!-- 根据日期更新预约人数 -->
     <delete id="editNumberByOrderDate" parameterType="com.itheima.pojo.OrderSetting">
         update t_ordersetting set number = #{number} where orderDate = #{orderDate}
@@ -22,5 +25,8 @@
             parameterType="hashmap"
             resultType="com.itheima.pojo.OrderSetting">
         select * from t_ordersetting where orderDate between #{dateBegin} and #{dateEnd}
+    </select>
+    <select id="findByOrderDate" resultType="com.itheima.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate=#{orderDate}
     </select>
 </mapper>

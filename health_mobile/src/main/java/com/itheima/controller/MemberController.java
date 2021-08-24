@@ -13,6 +13,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Author maohao
@@ -43,7 +44,8 @@ public class MemberController {
             if (code4Redis == null || code4Redis.length() == 0) {
                 return new Result(false, "验证码超时，请重新获取");
             }
-            if (!validateCode.equals(code4Redis)) {
+//            validateCode.equals(code4Redis)
+            if (!Objects.equals(validateCode, code4Redis)) {
                 return new Result(false, MessageConstant.VALIDATECODE_ERROR);
             }
             memberService.smsLogin(telephone);

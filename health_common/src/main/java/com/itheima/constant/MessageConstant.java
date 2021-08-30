@@ -38,7 +38,7 @@ public class MessageConstant {
     public static final String EDIT_MEMBER_SUCCESS = "编辑会员成功";
     public static final String TELEPHONE_VALIDATECODE_NOTNULL = "手机号和验证码都不能为空";
     public static final String LOGIN_SUCCESS = "登录成功";
-    public static final String LOGIN_FAIL = "登录成功";
+    public static final String LOGIN_FAIL = "登录失败";
     public static final String VALIDATECODE_ERROR = "验证码输入错误";
     public static final String QUERY_ORDER_SUCCESS = "查询预约信息成功";
     public static final String QUERY_ORDER_FAIL = "查询预约信息失败";

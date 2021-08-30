@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--增加权限注解支持-->
+    <security:global-method-security pre-post-annotations="enabled"/>
+
+    <!--由于前后端分离
+        1.不需要配置排除资源
+        2.不配置需要授权访问的资源及访问角色及权限
+    -->
+
+    <!-- 2.配置需要授权访问的资源及访问角色及权限-->
+    <security:http auto-config="true" use-expressions="true">
+        <security:headers>
+            <!--设置在页面可以通过iframe访问受保护的页面，默认为不允许访问-->
+            <security:frame-options policy="SAMEORIGIN"></security:frame-options>
+        </security:headers>
+        <!--配置拦截规则，/** 表示拦截所有请求-->
+        <!--
+            pattern:描述拦截规则
+            asscess:指定所需的访问角色或者访问权限
+        -->
+        <!--只要认证通过就可以访问-->
+        <security:intercept-url pattern="/pages/**"  access="isAuthenticated()" />
+        <!--自定义登录配置-->
+        <security:form-login
+                login-page="/login.html"
+                login-processing-url="/sec/login.do"
+                authentication-success-forward-url="/user/loginSuccess.do"
+                authentication-failure-forward-url="/user/loginFail.do"
+        />
+        <!--启用自定义登录-->
+        <security:csrf disabled="true"/>
+        <!--
+          logout：退出登录
+          logout-url：退出登录操作对应的请求路径, /logout.do为Spring Security提供的默认退出登录的请求操作
+          logout-success-url：退出登录后的跳转页面
+          invalidate-session: 销毁Session中的当前对象
+        -->
+        <security:logout
+            logout-url="/sec/logout.do"
+            logout-success-url="/login.html"
+            invalidate-session="true"
+        />
+    </security:http>
+
+    <!-- 3.配置认证授权管理器（认证管理者、认证提供者、认证对象）-->
+    <security:authentication-manager>
+        <!--authentication-provider：认证提供者，执行具体的认证逻辑-->
+        <security:authentication-provider user-service-ref="SecurityUserDetailsService">
+            <!--使用BCrypt密码加密对象-->
+            <security:password-encoder ref="passwordEncoder"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!--配置自定义授课服务对象-->
+    <bean id="SecurityUserDetailsService" class="com.itheima.security.SecurityUserDetailsService"/>
+    <!--配置BCrypt密码加密对象-->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+</beans>

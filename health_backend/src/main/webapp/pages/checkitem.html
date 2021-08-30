@@ -228,6 +228,15 @@
                 this.findPage();//VUE对象初始化完成后调用分页查询方法，完成分页查询
             },
             methods: {
+                //权限不足提示
+                showMessage(error) {
+                    console.log(error);
+                    if (error.message.indexOf("403") != -1) {
+                        this.message.error("无权访问");
+                    } else {
+                        this.message.error("未知错误");
+                    }
+                },
                 //编辑
                 handleEdit() {
                     //进行表单校验
@@ -245,6 +254,8 @@
                                     //执行失败
                                     this.$message.error(res.data.message);
                                 }
+                            }).catch((error)=>{
+                                this.showMessage(error);
                             }).finally(() => {
                                 //不管成功还是失败，都调用分页查询方法
                                 this.findPage();
